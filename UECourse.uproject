@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{C70BEF11-4DF8-D9A7-DA9D-CBB5DDDE72CB}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "UECourse",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	]
+}
