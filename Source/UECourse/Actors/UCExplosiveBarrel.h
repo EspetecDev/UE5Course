@@ -14,8 +14,8 @@ class UECOURSE_API AUCExplosiveBarrel : public AActor
 	GENERATED_BODY()
 
 public:
+
 	AUCExplosiveBarrel();
-	virtual void Tick(float DeltaTime) override;
 
 protected:
 
@@ -25,6 +25,11 @@ protected:
 	TObjectPtr<URadialForceComponent> RadialForce = nullptr;
 
 protected:
+
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	UFUNCTION()
+	void OnComponentHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 };
