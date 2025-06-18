@@ -21,11 +21,17 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 	TObjectPtr<USpringArmComponent> SpringArmComponent = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
+	TSubclassOf<AActor> ProjectileClass = nullptr; 
+
 protected:
 	virtual void BeginPlay() override;
 
 	void MoveForward(float Value);
+	void MoveRight(float Value);
 	void Turn(float Value);
+	void LookUp(float Value);
+	void PrimaryAttack();
 
 
 public:	
