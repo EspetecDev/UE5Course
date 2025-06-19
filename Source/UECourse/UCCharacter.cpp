@@ -4,6 +4,7 @@
 #include "UCCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/UCInteractComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -20,6 +21,8 @@ AUCCharacter::AUCCharacter()
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	InteractComponent = CreateDefaultSubobject<UUCInteractComponent>("InteractComp");
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
@@ -53,7 +56,7 @@ void AUCCharacter::Turn(float Value)
 {
 	AddControllerYawInput(Value);
 }
-
+ 
 void AUCCharacter::LookUp(float Value)
 {
 	AddControllerPitchInput(Value);
@@ -67,6 +70,11 @@ void AUCCharacter::PrimaryAttack()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
+}
+
+void AUCCharacter::LaunchInteract()
+{
+	InteractComponent->PrimaryInteract();
 }
 
 void AUCCharacter::Tick(float DeltaTime)
@@ -90,6 +98,7 @@ void AUCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAction("PrimaryAttack", EInputEvent::IE_Pressed, this, &ThisClass::PrimaryAttack);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &ThisClass::LaunchInteract);
 
 }
 

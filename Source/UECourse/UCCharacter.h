@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "UCCharacter.generated.h"
 
+class UUCInteractComponent;
 class UCameraComponent;
 class USpringArmComponent;
 
@@ -20,6 +21,8 @@ protected:
 	TObjectPtr<UCameraComponent> CameraComponent = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
 	TObjectPtr<USpringArmComponent> SpringArmComponent = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	TObjectPtr<UUCInteractComponent> InteractComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
 	TSubclassOf<AActor> ProjectileClass = nullptr; 
@@ -32,6 +35,7 @@ protected:
 	void Turn(float Value);
 	void LookUp(float Value);
 	void PrimaryAttack();
+	void LaunchInteract();
 
 
 public:	
