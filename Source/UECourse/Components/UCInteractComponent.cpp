@@ -43,7 +43,7 @@ void UUCInteractComponent::PrimaryInteract()
 			if (HitActor->Implements<UUCGameplayInterface>())
 			{
 				IUCGameplayInterface::Execute_Interact(HitActor, InstigatorPawn);
-				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, SphereRadius, 32, DebugLineColor, false, 2.f, 0, 2.f);
+				// DrawDebugSphere(GetWorld(), Hit.ImpactPoint, SphereRadius, 32, DebugLineColor, false, 2.f, 0, 2.f);
 				break;
 			}
 		}

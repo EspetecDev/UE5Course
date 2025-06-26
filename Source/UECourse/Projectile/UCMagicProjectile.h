@@ -20,7 +20,7 @@ public:
 
 protected:
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<USphereComponent> SphereComp = nullptr;
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> MovementComp = nullptr;

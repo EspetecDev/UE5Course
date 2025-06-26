@@ -25,11 +25,16 @@ protected:
 	TObjectPtr<UUCInteractComponent> InteractComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
-	TSubclassOf<AActor> ProjectileClass = nullptr; 
+	TSubclassOf<AActor> ProjectileClass = nullptr;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
+	TObjectPtr<UAnimMontage> AttackAnim = nullptr;
+
+	FTimerHandle AttackTimerHandle;
 
 protected:
 	virtual void BeginPlay() override;
 
+	// Input
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Turn(float Value);
@@ -37,6 +42,11 @@ protected:
 	void PrimaryAttack();
 	void LaunchInteract();
 
+	// Combat
+	void AttackTimerEnd();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void FakeAttack();
 
 public:	
 

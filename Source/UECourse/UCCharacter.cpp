@@ -64,10 +64,19 @@ void AUCCharacter::LookUp(float Value)
 
 void AUCCharacter::PrimaryAttack()
 {
+	FakeAttack();
+	
+	// PlayAnimMontage(AttackAnim);
+	// GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ThisClass::AttackTimerEnd, 0.2f);
+}
+
+void AUCCharacter::AttackTimerEnd()
+{
 	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 	FTransform SpawnTransform = FTransform(GetActorRotation(), HandLocation);
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
 	
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
 }
@@ -76,6 +85,7 @@ void AUCCharacter::LaunchInteract()
 {
 	InteractComponent->PrimaryInteract();
 }
+
 
 void AUCCharacter::Tick(float DeltaTime)
 {

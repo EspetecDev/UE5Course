@@ -21,10 +21,7 @@ void AUCExplosiveBarrel::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (IsValid(StaticMesh))
-	{
-		StaticMesh->OnComponentHit.AddUniqueDynamic(this, &ThisClass::OnComponentHit);
-	}
+	
 }
 
 void AUCExplosiveBarrel::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -38,8 +35,18 @@ void AUCExplosiveBarrel::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
+void AUCExplosiveBarrel::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (IsValid(StaticMesh))
+	{
+		StaticMesh->OnComponentHit.AddUniqueDynamic(this, &ThisClass::OnComponentHit);
+	}
+}
+
 void AUCExplosiveBarrel::OnComponentHit(UPrimitiveComponent* HitComponent, ThisClass::Super* OtherActor,
-	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+                                        UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (IsValid(RadialForce))
 	{
