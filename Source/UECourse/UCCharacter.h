@@ -27,6 +27,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
 	TSubclassOf<AActor> ProjectileClass = nullptr;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
+	TSubclassOf<AActor> UltimateProjectileClass = nullptr;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<UAnimMontage> AttackAnim = nullptr;
 
 	FTimerHandle AttackTimerHandle;
@@ -40,6 +42,7 @@ protected:
 	void Turn(float Value);
 	void LookUp(float Value);
 	void PrimaryAttack();
+	void UltimateAttack();
 	void LaunchInteract();
 
 	// Combat

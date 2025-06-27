@@ -66,8 +66,19 @@ void AUCCharacter::PrimaryAttack()
 {
 	FakeAttack();
 	
-	// PlayAnimMontage(AttackAnim);
-	// GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ThisClass::AttackTimerEnd, 0.2f);
+	PlayAnimMontage(AttackAnim);
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ThisClass::AttackTimerEnd, 0.2f);
+}
+
+void AUCCharacter::UltimateAttack()
+{
+	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	FTransform SpawnTransform = FTransform(GetActorRotation(), HandLocation);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+	
+	GetWorld()->SpawnActor<AActor>(UltimateProjectileClass, SpawnTransform, SpawnParams);
 }
 
 void AUCCharacter::AttackTimerEnd()
@@ -107,6 +118,7 @@ void AUCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction("PrimaryAttack", EInputEvent::IE_Pressed, this, &ThisClass::PrimaryAttack);
+	PlayerInputComponent->BindAction("UltimateAttack", EInputEvent::IE_Pressed, this, &ThisClass::UltimateAttack);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &ThisClass::LaunchInteract);
 
