@@ -16,7 +16,6 @@ class UECOURSE_API AUCMagicProjectile : public AActor
 public:	
 
 	AUCMagicProjectile();
-	virtual void Tick(float DeltaTime) override;
 
 protected:
 
@@ -26,13 +25,17 @@ protected:
 	TObjectPtr<UProjectileMovementComponent> MovementComp = nullptr;
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UParticleSystemComponent> ParticleComp = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<UParticleSystem> HitVFX = nullptr;
 	
 protected:
-
+	
 	virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
+	virtual void BeginDestroy() override;
 
+	UFUNCTION()
+	virtual void OnHit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-
-	
-	
 };

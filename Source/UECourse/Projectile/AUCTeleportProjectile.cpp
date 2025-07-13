@@ -1,26 +1,53 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "AUCTeleportProjectile.h"
 
+#include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
 
-// Sets default values
 AAUCTeleportProjectile::AAUCTeleportProjectile()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-// Called when the game starts or when spawned
 void AAUCTeleportProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::OnTimerComplete, WaitToTeleportTime);
 }
 
-// Called every frame
-void AAUCTeleportProjectile::Tick(float DeltaTime)
+void AAUCTeleportProjectile::PostInitializeComponents()
 {
-	Super::Tick(DeltaTime);
+	Super::PostInitializeComponents();
 }
+
+void AAUCTeleportProjectile::OnHit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	GetWorldTimerManager().ClearTimer(TimerHandle);
+	OnTimerComplete();
+}
+
+void AAUCTeleportProjectile::OnTimerComplete()
+{
+	if (!IsValid(DestroyVFX))
+		return;
+
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyVFX, GetActorLocation(),GetActorRotation());
+	MovementComp->StopMovementImmediately();
+	
+	FTimerHandle ExplodeTimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::OnExplodeTimerEnds, 0.2);
+}
+
+void AAUCTeleportProjectile::OnExplodeTimerEnds()
+{
+	AActor* InstigatorActor = GetInstigator();
+	if (!IsValid(InstigatorActor))
+		return;
+
+	InstigatorActor->SetActorLocation(GetActorLocation());
+	Destroy();
+}
+
+
 

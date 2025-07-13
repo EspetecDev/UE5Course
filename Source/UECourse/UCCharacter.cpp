@@ -92,6 +92,17 @@ void AUCCharacter::AttackTimerEnd()
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
 }
 
+void AUCCharacter::TeleportTimerEnd()
+{
+	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	FTransform SpawnTransform = FTransform(GetActorRotation(), HandLocation);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+	
+	GetWorld()->SpawnActor<AActor>(TeleportProjectileClass, SpawnTransform, SpawnParams);
+}
+
 void AUCCharacter::LaunchInteract()
 {
 	InteractComponent->PrimaryInteract();
@@ -101,7 +112,12 @@ void AUCCharacter::LaunchInteract()
 void AUCCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void AUCCharacter::Teleport()
+{
+	PlayAnimMontage(AttackAnim);
+	GetWorldTimerManager().SetTimer(TeleportStartTimerHandle, this, &ThisClass::TeleportTimerEnd, 0.2f);
 }
 
 // Called to bind functionality to input
@@ -119,6 +135,7 @@ void AUCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAction("PrimaryAttack", EInputEvent::IE_Pressed, this, &ThisClass::PrimaryAttack);
 	PlayerInputComponent->BindAction("UltimateAttack", EInputEvent::IE_Pressed, this, &ThisClass::UltimateAttack);
+	PlayerInputComponent->BindAction("Teleport", EInputEvent::IE_Pressed, this, &ThisClass::Teleport);
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &ThisClass::LaunchInteract);
 

@@ -11,15 +11,33 @@ class UECOURSE_API AAUCTeleportProjectile : public AUCMagicProjectile
 {
 	GENERATED_BODY()
 
+protected:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Config)
+	TObjectPtr<UParticleSystem> DestroyVFX = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Config)
+	float WaitToExplodeTime = 0.2f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Config)
+	float WaitToTeleportTime = 0.2f;
+
+private:
+
+	FTimerHandle TimerHandle;
+
 public:
-	// Sets default values for this actor's properties
 	AAUCTeleportProjectile();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
 
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void OnHit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
+
+private:
+
+	void OnExplodeTimerEnds();
+	void OnTimerComplete();
+
 };

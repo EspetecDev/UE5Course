@@ -29,9 +29,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
 	TSubclassOf<AActor> UltimateProjectileClass = nullptr;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
+	TSubclassOf<AActor> TeleportProjectileClass = nullptr;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<UAnimMontage> AttackAnim = nullptr;
 
 	FTimerHandle AttackTimerHandle;
+	FTimerHandle TeleportStartTimerHandle;
 
 protected:
 	virtual void BeginPlay() override;
@@ -44,9 +47,11 @@ protected:
 	void PrimaryAttack();
 	void UltimateAttack();
 	void LaunchInteract();
+	void Teleport();
 
-	// Combat
+	// Timers
 	void AttackTimerEnd();
+	void TeleportTimerEnd();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
 	void FakeAttack();
@@ -55,6 +60,7 @@ public:
 
 	AUCCharacter();
 	virtual void Tick(float DeltaTime) override;
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	

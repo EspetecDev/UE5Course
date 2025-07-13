@@ -4,6 +4,7 @@
 
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
 
@@ -32,11 +33,29 @@ AUCMagicProjectile::AUCMagicProjectile()
 void AUCMagicProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SphereComp->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnHit);
 }
 
-void AUCMagicProjectile::Tick(float DeltaTime)
+void AUCMagicProjectile::PostInitializeComponents()
 {
-	Super::Tick(DeltaTime);
+	Super::PostInitializeComponents();
 
+	constexpr bool bShouldIgnore = true;
+	SphereComp->IgnoreActorWhenMoving(GetInstigator(), bShouldIgnore);
 }
 
+void AUCMagicProjectile::BeginDestroy()
+{
+	SphereComp->OnComponentBeginOverlap.RemoveAll(this);
+	Super::BeginDestroy();
+}
+
+void AUCMagicProjectile::OnHit(UPrimitiveComponent* OverlappedComponent, ThisClass::Super* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (!IsValid(HitVFX))
+		return;
+	
+	UGameplayStatics::SpawnEmitterAtLocation(this, HitVFX, GetActorLocation(), GetActorRotation());
+	Destroy();
+}
