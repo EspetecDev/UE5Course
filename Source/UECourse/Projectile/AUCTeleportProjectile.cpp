@@ -21,7 +21,7 @@ void AAUCTeleportProjectile::PostInitializeComponents()
 	Super::PostInitializeComponents();
 }
 
-void AAUCTeleportProjectile::OnHit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AAUCTeleportProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	GetWorldTimerManager().ClearTimer(TimerHandle);
 	OnTimerComplete();

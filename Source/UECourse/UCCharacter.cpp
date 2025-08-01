@@ -4,6 +4,7 @@
 #include "UCCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/UCAttributeComponent.h"
 #include "Components/UCInteractComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -23,7 +24,8 @@ AUCCharacter::AUCCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	InteractComponent = CreateDefaultSubobject<UUCInteractComponent>("InteractComp");
-
+	AttributeComponent = CreateDefaultSubobject<UUCAttributeComponent>("AttributeComponent");
+	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 }
@@ -77,6 +79,7 @@ void AUCCharacter::UltimateAttack()
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
+	SpawnParams.Owner = this;
 	
 	GetWorld()->SpawnActor<AActor>(UltimateProjectileClass, SpawnTransform, SpawnParams);
 }
@@ -88,6 +91,7 @@ void AUCCharacter::AttackTimerEnd()
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
+	SpawnParams.Owner = this;
 	
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
 }
@@ -99,6 +103,7 @@ void AUCCharacter::TeleportTimerEnd()
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Instigator = this;
+	SpawnParams.Owner = this;
 	
 	GetWorld()->SpawnActor<AActor>(TeleportProjectileClass, SpawnTransform, SpawnParams);
 }

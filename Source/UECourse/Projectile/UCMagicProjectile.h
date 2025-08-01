@@ -13,8 +13,8 @@ class UECOURSE_API AUCMagicProjectile : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-
+public:
+	
 	AUCMagicProjectile();
 
 protected:
@@ -36,6 +36,7 @@ protected:
 	virtual void BeginDestroy() override;
 
 	UFUNCTION()
-	virtual void OnHit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
+	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };
