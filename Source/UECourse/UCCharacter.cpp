@@ -74,38 +74,17 @@ void AUCCharacter::PrimaryAttack()
 
 void AUCCharacter::UltimateAttack()
 {
-	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	FTransform SpawnTransform = FTransform(GetActorRotation(), HandLocation);
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-	SpawnParams.Owner = this;
-	
-	GetWorld()->SpawnActor<AActor>(UltimateProjectileClass, SpawnTransform, SpawnParams);
+	ShootProjectile(UltimateProjectileClass);
 }
 
 void AUCCharacter::AttackTimerEnd()
 {
-	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	FTransform SpawnTransform = FTransform(GetActorRotation(), HandLocation);
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-	SpawnParams.Owner = this;
-	
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
+	ShootProjectile(ProjectileClass);
 }
 
 void AUCCharacter::TeleportTimerEnd()
 {
-	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	FTransform SpawnTransform = FTransform(GetActorRotation(), HandLocation);
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-	SpawnParams.Owner = this;
-	
-	GetWorld()->SpawnActor<AActor>(TeleportProjectileClass, SpawnTransform, SpawnParams);
+	ShootProjectile(TeleportProjectileClass);
 }
 
 void AUCCharacter::LaunchInteract()
@@ -123,6 +102,22 @@ void AUCCharacter::Teleport()
 {
 	PlayAnimMontage(AttackAnim);
 	GetWorldTimerManager().SetTimer(TeleportStartTimerHandle, this, &ThisClass::TeleportTimerEnd, 0.2f);
+}
+
+void AUCCharacter::ShootProjectile(UClass* InProjectileClass)
+{
+	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	UCameraComponent* OwningCamera = Cast<UCameraComponent>(GetComponentByClass(UCameraComponent::StaticClass()));
+	if (!IsValid(OwningCamera))
+		return;
+	
+	FTransform SpawnTransform = FTransform(OwningCamera->GetForwardVector().ToOrientationRotator(), HandLocation);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+	SpawnParams.Owner = this;
+	
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
 }
 
 // Called to bind functionality to input

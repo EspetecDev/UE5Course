@@ -51,6 +51,7 @@ protected:
 	void UltimateAttack();
 	void LaunchInteract();
 	void Teleport();
+	void ShootProjectile(UClass* InProjectileClass);
 
 	// Timers
 	void AttackTimerEnd();
